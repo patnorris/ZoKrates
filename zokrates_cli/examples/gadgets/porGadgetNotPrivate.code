@@ -5,13 +5,11 @@ import "./merkleGadget.code" as merkleGadget
 import "./xorGadget.code" as xorGadget
 import "./equalityGadget.code" as equalityGadget
 
-//public inputs:
+//inputs:
   //r_root
   //d_root
   //path (specifies specific leaf i)
   //address (public key prover)
-
-//private inputs:
   //ri
   //rj_vec
   //di
