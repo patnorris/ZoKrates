@@ -1,0 +1,36 @@
+// por gadget
+//called to create the proof of replication
+
+import "./merkleGadget.code" as merkleGadget
+import "./xorGadget.code" as xorGadget
+import "./equalityGadget.code" as equalityGadget
+
+//public inputs:
+  //r_root
+  //d_root
+  //path (specifies specific leaf i)
+  //address (public key prover)
+
+//private inputs:
+  //ri
+  //rj_vec
+  //di
+  //dj_vec
+
+def main(field[256] r_root, field[256] d_root, field[10] pathToLeaf, field[256] addressProver, field[256] ri, field[10][512] rj_vec, field[256] di, field[10][512] dj_vec) -> (field):
+//decrypt ri with prover's address
+  field[256] decryptedRi = xorGadget(ri, addressProver)
+
+//creates equalityGadget for di and decryptedRi
+  field equalityGiven = equalityGadget(di, decryptedRi)
+  equalityGiven == 1
+
+//creates merkleGadget for ri
+  field merkleOutputRi = merkleGadget(ri, pathToLeaf, rj_vec, r_root)
+  merkleOutputRi == 1
+
+//creates merkleGadget for di
+  field merkleOutputDi = merkleGadget(di, pathToLeaf, dj_vec, d_root)
+  merkleOutputDi == 1
+
+  return 1

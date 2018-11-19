@@ -1,0 +1,26 @@
+//xor gadget for calculating xor on two inputs of 256 bits each
+
+//helper functions
+def NOT(field x) -> (field):
+	return 1 - x
+
+def AND(field x, field y) -> (field):
+	return x * y
+
+def OR(field x, field y) -> (field):
+	return NOT(AND(NOT(x), NOT(y)))
+
+def XOR(field x, field y) -> (field):
+	return AND(OR(x, y), NOT(AND(x,y)))
+
+//inputs: 256 bits for each of the two inputs (512 bits in total) (as arrays)
+//output: xored input 1 with input 2 (bitwise) (as array)
+def main(field[256] inputOneBits, field[256] inputTwoBits) -> (field[256]):
+	field[256] xored = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+	for field i in 0..256 do
+		field xorBit = XOR(inputOneBits[i], inputTwoBits[i])
+		xored[i] = xorBit
+	endfor
+
+	return xored

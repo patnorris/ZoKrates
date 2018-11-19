@@ -1,0 +1,16 @@
+//--> 'Compilation failed: Syntax error: Error at 10:10: Expected one of [`identifier`], got `[`'
+
+import "../helpers/sha256.code" as sha256
+
+def main() -> (field):
+	field[3] a1 = [1, 1, 1]
+	field[3] a2 = [0, 1, 1]
+	field[3] a3 = [0, 0, 1]
+
+	field[3][3] multiAr = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+	multiAr[0][0] = a1[0]
+
+	multiAr[0][0] == 1
+
+	return 1
