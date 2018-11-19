@@ -1,4 +1,4 @@
-cd D:/02_TUBerlin/04_MasterThesis/coding/ProofOfReplication/ZoKrates
+cd D:/02_TUBerlin/04_MasterThesis/coding/ProofOfReplication/fork/ZoKrates
 docker build -t zokrates .
 docker run -ti zokrates /bin/bash
 

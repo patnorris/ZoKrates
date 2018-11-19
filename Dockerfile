@@ -36,8 +36,7 @@ COPY --chown=zokrates:zokrates . src
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain $RUST_TOOLCHAIN -y \
     && export PATH=/home/zokrates/.cargo/bin:$PATH \
-    && (cd src;./build_release.sh) \
-    && mv ./src/target/release/zokrates . \
-    && mv ./src/zokrates_cli/examples . \
+    && cd src \
+    && ./build.sh \
     && rustup self uninstall -y \
     && rm -rf $LIBSNARK_SOURCE_PATH src
