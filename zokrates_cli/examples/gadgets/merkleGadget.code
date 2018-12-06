@@ -10,8 +10,9 @@ import "./equalityGadget.code" as equalityGadget
 import "./helpers/calculateRootForLeftLeaf512Bits.code" as calculateRootForLeftLeaf512Bits
 import "./helpers/calculateRootForRightLeaf512Bits.code" as calculateRootForRightLeaf512Bits
 
-def main(field[512] leafBits, field pathToLeaf, field[256] otherBits, field[256] root) -> (field):
-  field[256] computedRoot = if pathToLeaf > 0 then calculateRootForLeftLeaf512Bits(leafBits, otherBits) else calculateRootForRightLeaf512Bits(otherBits, leafBits) fi
+def main(field[512] leafBits, field pathToLeaf, field[256] otherBits, field root) -> (field):
+  //field[256] computedRoot = if pathToLeaf > 0 then calculateRootForLeftLeaf512Bits(leafBits, otherBits) else calculateRootForRightLeaf512Bits(otherBits, leafBits) fi
+  field computedRoot = if pathToLeaf > 0 then calculateRootForLeftLeaf512Bits(leafBits, otherBits) else calculateRootForRightLeaf512Bits(otherBits, leafBits) fi
 
   field equalityGiven = equalityGadget(computedRoot, root)
   equalityGiven == 1

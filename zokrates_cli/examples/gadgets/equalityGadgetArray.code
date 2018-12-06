@@ -13,7 +13,9 @@
 //--> much easier to understand, straight forward
 //--> more cumbersome as no arrays
 
-def main(field inputOneBits, field inputTwoBits) -> (field):
-  inputOneBits == inputTwoBits
+def main(field[256] inputOneBits, field[256] inputTwoBits) -> (field):
+  for field i in 0..256 do
+    inputOneBits[i] == inputTwoBits[i]
+  endfor
 
   return 1
