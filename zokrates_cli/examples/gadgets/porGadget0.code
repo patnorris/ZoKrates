@@ -16,9 +16,9 @@
 //calculate hash of di: get 2 fields (with sha256packed)
 //merkle proof for di (merkleGadget): provide 2 fields each (for sha256packed)
 
-import "merkleGadget.code" as merkleGadget
-import "xorGadget.code" as xorGadget
-import "equalityGadget.code" as equalityGadget
+//import "./merkleGadget.code" as merkleGadget
+//import "./xorGadget.code" as xorGadget
+//import "./equalityGadget.code" as equalityGadget
 import "PACKING/pack128"
 import "LIBSNARK/sha256packed"
 

@@ -1,7 +1,7 @@
 // equality gadget
 //takes two leaves to compare
-//each leaf has 512 bits
-//each leaf is a parameter (as two arrays)
+//each leaf has 256 bits
+//each bit, i.e. twice 256 = 512, is a parameter (as two arrays)
 //assure equality by comparing each bit of one value to the corresponding bit of the other values
 
 //comparison to EQUALITY_GADGET_HPP:
@@ -13,9 +13,7 @@
 //--> much easier to understand, straight forward
 //--> more cumbersome as no arrays
 
-def main(field[512] inputOneBits, field[512] inputTwoBits) -> (field):
-  for field i in 0..512 do
-    inputOneBits[i] == inputTwoBits[i]
-  endfor
+def main(field inputOneBits, field inputTwoBits) -> (field):
+  inputOneBits == inputTwoBits
 
   return 1
