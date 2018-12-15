@@ -1,7 +1,10 @@
-// por gadget
-//called to create the proof of replication
+// test por gadget
+//without merkleGadget
+// compiled
+// Number of constraints: 110681
+// time: < 4min (ca. 3:40)
 
-import "./porGadget0.code" as porGadget
+import "./porGadgetNoMerkle.code" as porGadget
 
 def main() -> (field):
 //public inputs:
