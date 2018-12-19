@@ -1,5 +1,7 @@
 // test por gadget
-// killed
+// killed for 10 loops
+// killed for 3 loops
+// compiled for merkle gadget loop 0..2: Number of constraints: 331088 (with merkleGadgetWorking.code as merkle gadget), witness computed successfully
 
 import "./porGadget.code" as porGadget
 

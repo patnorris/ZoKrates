@@ -6,12 +6,21 @@
 //  root: root of the Merkle tree, computed root from leaves will be checked against this
 
 import "LIBSNARK/sha256packed"
+//import merkle gadget from here?
+//https://github.com/scipr-lab/libsnark/tree/master/libsnark/gadgetlib1/gadgets/merkle_tree
+
+def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
+  return computedRoot0, computedRoot1
 
 def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
   field computedRoot0 = leafHash[0]
   field computedRoot1 = leafHash[1]
 
-  for field i in 0..10 do
+//add parameter depthOfTree, initiate loopLengthVariable to 10 and then set loopLengthVariable to depthOfTree if they are not the same
+  field maxNumberLoops = 10
+  maxNumberLoops = if maxNumberLoops == depthOfTree then maxNumberLoops else depthOfTree fi
+  //for field i in 0..10 do
+  for field i in 0..2 do
 		field pathToTake =  pathToLeaf[i]
 
     //if pathToTake == 1: hash(leaf, next from otherHashes: i*2, i*2+1)
@@ -21,14 +30,9 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
     field otherHash0 = otherHashes[i*2]
     field otherHash1 = otherHashes[i*2 + 1]
 
-    leftHash0, leftHash1 = sha256packed(computedRoot0, computedRoot1, otherHash0, otherHash1)
-    rightHash0, rightHash1 = sha256packed(otherHash0, otherHash1, computedRoot0, computedRoot1)
-
-    computedRoot0 = if pathToTake == 1 then leftHash0 else computedRoot0 fi
-    computedRoot1 = if pathToTake == 1 then leftHash1 else computedRoot1 fi
-
-    computedRoot0 = if pathToTake == 0 then rightHash0 else computedRoot0 fi
-    computedRoot1 = if pathToTake == 0 then rightHash1 else computedRoot1 fi
+//short circuits not supported in arithmetic circuits --> cannot call function in if/else
+    computedRoot0, computedRoot1 = if pathToTake == 1 then sha256packed(computedRoot0, computedRoot1, otherHash0, otherHash1) else returnRootHashes(computedRoot0, computedRoot1) fi
+    computedRoot0, computedRoot1 = if pathToTake == 0 then sha256packed(otherHash0, otherHash1, computedRoot0, computedRoot1) else returnRootHashes(computedRoot0, computedRoot1) fi
 
 	endfor
 
