@@ -8,6 +8,7 @@ use field::Field;
 use flat_absy::FlatProg;
 use flatten::Flattener;
 use imports::{self, Importer};
+use ir;
 use optimizer::Optimizer;
 use parser::{self, parse_program};
 use semantics::{self, Checker};
@@ -64,9 +65,9 @@ pub fn compile<T: Field, R: BufRead, S: BufRead, E: Into<imports::Error>>(
     reader: &mut R,
     location: Option<String>,
     resolve_option: Option<fn(&Option<String>, &String) -> Result<(S, String, String), E>>,
-) -> Result<FlatProg<T>, CompileError<T>> {
+) -> Result<ir::Prog<T>, CompileError<T>> {
     let compiled = compile_aux(reader, location, resolve_option)?;
-    Ok(Optimizer::new().optimize_program(compiled))
+    Ok(ir::Prog::from(Optimizer::new().optimize_program(compiled)))
 }
 
 pub fn compile_aux<T: Field, R: BufRead, S: BufRead, E: Into<imports::Error>>(
@@ -113,12 +114,14 @@ mod test {
 		"#
             .as_bytes(),
         );
-        let res: Result<FlatProg<FieldPrime>, CompileError<FieldPrime>> = compile(
+        let res: Result<ir::Prog<FieldPrime>, CompileError<FieldPrime>> = compile(
             &mut r,
             Some(String::from("./path/to/file")),
             None::<
-                fn(&Option<String>, &String)
-                    -> Result<(BufReader<Empty>, String, String), io::Error>,
+                fn(
+                    &Option<String>,
+                    &String,
+                ) -> Result<(BufReader<Empty>, String, String), io::Error>,
             >,
         );
         assert_eq!(
@@ -136,12 +139,14 @@ mod test {
 		"#
             .as_bytes(),
         );
-        let res: Result<FlatProg<FieldPrime>, CompileError<FieldPrime>> = compile(
+        let res: Result<ir::Prog<FieldPrime>, CompileError<FieldPrime>> = compile(
             &mut r,
             Some(String::from("./path/to/file")),
             None::<
-                fn(&Option<String>, &String)
-                    -> Result<(BufReader<Empty>, String, String), io::Error>,
+                fn(
+                    &Option<String>,
+                    &String,
+                ) -> Result<(BufReader<Empty>, String, String), io::Error>,
             >,
         );
         assert!(res.is_ok());

@@ -10,9 +10,11 @@
 	- [Functions](./concepts/functions.md)
 	- [Control flow](./concepts/control_flow.md)
 	- [Comments](./concepts/comments.md)
+	- [Standard Library](./concepts/stdlib.md)
 
 - [Reference](reference/index.md)
     - [CLI](reference/cli.md)
+    - [Backends](reference/backends.md)
     - [Verification](reference/verification.md)
 
 - [Tutorial: Proof of preimage](./sha256example.md)
