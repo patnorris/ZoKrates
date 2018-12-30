@@ -1,3 +1,5 @@
+after merge: build.sh --> change to LF (from CRLF) in lower bar (otherwise build.sh not found)
+
 cd D:/02_TUBerlin/04_MasterThesis/coding/ProofOfReplication/fork/ZoKrates
 docker build -t zokrates .
 docker run -ti zokrates /bin/bash

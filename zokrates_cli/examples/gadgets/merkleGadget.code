@@ -8,6 +8,12 @@
 import "LIBSNARK/sha256packed"
 //import merkle gadget from here?
 //https://github.com/scipr-lab/libsnark/tree/master/libsnark/gadgetlib1/gadgets/merkle_tree
+//use:
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.hpp
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
+//future work: do di and ri proof in one proof?:
+//(use gadget differently; no update but two merkle trees with same authentication path)
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_update_gadget.hpp
 
 def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
   return computedRoot0, computedRoot1
