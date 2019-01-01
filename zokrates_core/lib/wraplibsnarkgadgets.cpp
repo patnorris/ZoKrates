@@ -1,4 +1,4 @@
-//https://gist.github.com/kobigurk/24c25e68219df87c348f1a78db51bb52	
+//https://gist.github.com/kobigurk/24c25e68219df87c348f1a78db51bb52
 #include <iostream>
 
 #include "wraplibsnarkgadgets.hpp"
@@ -9,6 +9,8 @@
 #include "libsnark/gadgetlib1/gadgets/hashes/sha256/sha256_components.hpp"
 #include "libsnark/gadgetlib1/gadgets/hashes/sha256/sha256_gadget.hpp"
 
+#include "libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.hpp"
+
 using namespace libsnark;
 using namespace libff;
 using std::vector;
@@ -16,7 +18,7 @@ using std::vector;
 
 typedef libff::Fr<alt_bn128_pp> FieldT;
 
-pb_variable_array<FieldT> from_bits(std::vector<bool> bits, pb_variable<FieldT>& ZERO) 
+pb_variable_array<FieldT> from_bits(std::vector<bool> bits, pb_variable<FieldT>& ZERO)
 {
     pb_variable_array<FieldT> acc;
 
@@ -28,7 +30,7 @@ pb_variable_array<FieldT> from_bits(std::vector<bool> bits, pb_variable<FieldT>&
     return acc;
 }
 
-vector<unsigned long> bit_list_to_ints(vector<bool> bit_list, const size_t wordsize) 
+vector<unsigned long> bit_list_to_ints(vector<bool> bit_list, const size_t wordsize)
 {
     vector<unsigned long> res;
     size_t iterations = bit_list.size()/wordsize+1;
@@ -43,7 +45,7 @@ vector<unsigned long> bit_list_to_ints(vector<bool> bit_list, const size_t words
     return res;
 }
 
-class ethereum_sha256 : gadget<FieldT> 
+class ethereum_sha256 : gadget<FieldT>
 {
 private:
     std::shared_ptr<block_variable<FieldT>> block1;
@@ -63,9 +65,9 @@ public:
 
         intermediate_hash.reset(new digest_variable<FieldT>(pb, 256, "intermediate"));
 
-        // As the hash is computed on the full 512bit block size 
+        // As the hash is computed on the full 512bit block size
         // padding does not fit in the primary block
-        // => add dummy block (single "1" followed by "0" + total length) 
+        // => add dummy block (single "1" followed by "0" + total length)
         pb_variable_array<FieldT> length_padding =
             from_bits({
                 //dummy padding block
@@ -198,7 +200,7 @@ void constraint_to_json(linear_combination<FieldT> constraints, std::stringstrea
         if (count != 0) {
             ss << ",";
         }
-        
+
         ss << '"' << lt.index << '"' << ":" << '"' << lt.coeff << '"';
         count++;
     }
@@ -252,7 +254,7 @@ char* _shaEth256Constraints()
 
     ethereum_sha256 g(pb, ZERO, left, right, output);
     g.generate_r1cs_constraints();
-    
+
     auto json = r1cs_to_json(pb);
 
     auto result = new char[json.size()];
@@ -305,7 +307,7 @@ char* _shaEth256Witness(const uint8_t* inputs, int inputs_length)
         std::cerr << libsnarkBigintFromBytesAux(inputs + i*32) << "\n";
         left_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
     }
-    
+
     for (int i = inputs_length / 2; i < inputs_length; i++) {
         std::cerr << libsnarkBigintFromBytesAux(inputs + i*32) << "\n";
         right_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
@@ -339,7 +341,7 @@ char* _sha256Constraints()
 
     sha256_two_to_one_hash_gadget<FieldT> f(pb, left, right, output, "f");
     f.generate_r1cs_constraints();
-    
+
     auto json = r1cs_to_json(pb);
 
     auto result = new char[json.size()];
@@ -351,7 +353,7 @@ char* _sha256Witness(const uint8_t* inputs, int inputs_length)
 {
 
     libff::alt_bn128_pp::init_public_params();
-    
+
     protoboard<FieldT> pb;
 
     digest_variable<FieldT> left(pb, SHA256_digest_size, "left");
@@ -375,7 +377,93 @@ char* _sha256Witness(const uint8_t* inputs, int inputs_length)
     right.generate_r1cs_witness(right_bv);
 
     f.generate_r1cs_witness();
-    
+
+    assert(pb.is_satisfied());
+
+    auto json = array_to_json(pb);
+    auto result = new char[json.size()];
+    memcpy(result, json.c_str(), json.size() + 1);
+    return result;
+}
+
+char* _merkleReadConstraints()
+{
+  //see test: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
+    const size_t digest_len = HashT::get_digest_len();
+    libff::alt_bn128_pp::init_public_params();
+    //parameters for merkle_tree_check_read_gadget
+    protoboard<FieldT> pb;
+    size_t tree_depth = 16; //hardcoded to 16 --> flexible??
+    //pb_linear_combination_array<FieldT> &address_bits; //& in front???
+    pb_variable_array<FieldT> address_bits;
+    address_bits.allocate(pb, tree_depth, "address_bits");
+    //digest_variable<FieldT> leaf(pb, SHA256_digest_size, "leaf");
+    digest_variable<FieldT> leaf(pb, digest_len, "leaf");
+    digest_variable<FieldT> root(pb, digest_len, "root");
+    merkle_authentication_path_variable<FieldT, HashT> path(pb, tree_depth, "path_var");
+    //pb_linear_combination<FieldT> &read_successful;
+    //std::string &annotation_prefix; //provide parameter directly: "m"
+
+    //digest_variable<FieldT> left(pb, SHA256_digest_size, "left");
+    //digest_variable<FieldT> right(pb, SHA256_digest_size, "right");
+    //digest_variable<FieldT> output(pb, SHA256_digest_size, "output");
+
+    //sha256_two_to_one_hash_gadget<FieldT> f(pb, left, right, output, "f");
+    //f.generate_r1cs_constraints();
+    //read_successful --> ONE
+    merkle_tree_check_read_gadget<FieldT, HashT> m(pb, tree_depth, address_bits, leaf, root, path, ONE, "m");
+    path.generate_r1cs_constraints();
+    m.generate_r1cs_constraints();
+
+    auto json = r1cs_to_json(pb);
+
+    auto result = new char[json.size()];
+    memcpy(result, json.c_str(), json.size() + 1);
+    return result;
+}
+
+char* _merkleReadWitness(const uint8_t* inputs, int inputs_length)
+{
+  //see test: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
+    const size_t digest_len = HashT::get_digest_len();
+    libff::alt_bn128_pp::init_public_params();
+    //parameters for merkle_tree_check_read_gadget
+    protoboard<FieldT> pb;
+    size_t tree_depth = 16; //hardcoded to 16 --> flexible??
+    pb_variable_array<FieldT> address_bits;
+    address_bits.allocate(pb, tree_depth, "address_bits");
+    digest_variable<FieldT> leaf(pb, digest_len, "leaf");
+    digest_variable<FieldT> root(pb, digest_len, "root");
+    merkle_authentication_path_variable<FieldT, HashT> path(pb, tree_depth, "path_var");
+
+    //read_successful --> ONE
+    merkle_tree_check_read_gadget<FieldT, HashT> m(pb, tree_depth, address_bits, leaf, root, path, ONE, "m");
+    path.generate_r1cs_constraints(true);
+    m.generate_r1cs_constraints(true);
+
+//leaf aka ri or di
+//address aka pathToLeaf
+//path aka rjVec or djVec (other nodes)
+//root aka rRoot or dRoot
+    libff::bit_vector leafInput;
+    size_t addressInput;
+    std::vector<merkle_authentication_node> pathInput(tree_depth);
+    libff::bit_vector rootInput;
+
+//fill input variables with inputs (parameter)
+
+for (int i = 0; i < inputs_length / 2; i++) {
+    left_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
+}
+for (int i = inputs_length / 2; i < inputs_length; i++) {
+    right_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
+}
+
+    leaf.generate_r1cs_witness(leafInput);
+    path.generate_r1cs_witness(addressInput, pathInput);
+    m.generate_r1cs_witness();
+    root.generate_r1cs_witness(rootInput);
+
     assert(pb.is_satisfied());
 
     auto json = array_to_json(pb);
