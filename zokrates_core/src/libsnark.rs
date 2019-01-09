@@ -18,6 +18,9 @@ extern "C" {
 
     fn _shaEth256Constraints() -> *mut c_char;
     fn _shaEth256Witness(inputs: *const uint8_t, inputs_length: c_int) -> *mut c_char;
+
+    fn _merkleReadConstraints() -> *mut c_char;
+    fn _merkleReadWitness(inputs: *const uint8_t, inputs_length: c_int) -> *mut c_char;
 }
 
 pub fn get_sha256_constraints() -> String {
@@ -51,6 +54,27 @@ pub fn get_ethsha256_witness<T: Field>(inputs: &Vec<T>) -> String {
 
     let a = unsafe {
         CString::from_raw(_shaEth256Witness(
+            inputs_arr[0].as_ptr(),
+            inputs.len() as i32,
+        ))
+    };
+    a.into_string().unwrap()
+}
+
+pub fn get_merkleread_constraints() -> String {
+    let a = unsafe { CString::from_raw(_merkleReadConstraints()) };
+    a.into_string().unwrap()
+}
+
+pub fn get_merkleread_witness<T: Field>(inputs: &Vec<T>) -> String {
+    let mut inputs_arr: Vec<[u8; 32]> = vec![[0u8; 32]; inputs.len()];
+
+    for (index, value) in inputs.into_iter().enumerate() {
+        inputs_arr[index] = vec_as_u8_32_array(&value.into_byte_vector());
+    }
+
+    let a = unsafe {
+        CString::from_raw(_merkleReadWitness(
             inputs_arr[0].as_ptr(),
             inputs.len() as i32,
         ))

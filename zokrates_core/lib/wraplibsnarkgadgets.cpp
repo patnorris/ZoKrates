@@ -10,13 +10,19 @@
 #include "libsnark/gadgetlib1/gadgets/hashes/sha256/sha256_gadget.hpp"
 
 #include "libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.hpp"
+#include <libsnark/common/data_structures/merkle_tree.hpp>
+#include <libsnark/gadgetlib1/gadgets/hashes/crh_gadget.hpp>
+#include <libsnark/gadgetlib1/gadgets/hashes/digest_selector_gadget.hpp>
+#include <libsnark/gadgetlib1/gadgets/hashes/hash_io.hpp>
+#include <libsnark/gadgetlib1/gadgets/merkle_tree/merkle_authentication_path_variable.hpp>
 
 using namespace libsnark;
 using namespace libff;
 using std::vector;
 
-
 typedef libff::Fr<alt_bn128_pp> FieldT;
+//typedef libff:: HashT;
+//template<typename HashT>
 
 pb_variable_array<FieldT> from_bits(std::vector<bool> bits, pb_variable<FieldT>& ZERO)
 {
@@ -386,6 +392,7 @@ char* _sha256Witness(const uint8_t* inputs, int inputs_length)
     return result;
 }
 
+template<typename HashT>
 char* _merkleReadConstraints()
 {
   //see test: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
@@ -422,6 +429,7 @@ char* _merkleReadConstraints()
     return result;
 }
 
+template<typename HashT>
 char* _merkleReadWitness(const uint8_t* inputs, int inputs_length)
 {
   //see test: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
@@ -450,14 +458,14 @@ char* _merkleReadWitness(const uint8_t* inputs, int inputs_length)
     std::vector<merkle_authentication_node> pathInput(tree_depth);
     libff::bit_vector rootInput;
 
-//fill input variables with inputs (parameter)
+//fill witness input variables with inputs (parameter)
 
-for (int i = 0; i < inputs_length / 2; i++) {
-    left_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
-}
-for (int i = inputs_length / 2; i < inputs_length; i++) {
-    right_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
-}
+  // for (int i = 0; i < inputs_length / 2; i++) {
+  //     left_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
+  // }
+// for (int i = inputs_length / 2; i < inputs_length; i++) {
+//     right_bv.push_back(libsnarkBigintFromBytesAux(inputs + i*32) == 1);
+// }
 
     leaf.generate_r1cs_witness(leafInput);
     path.generate_r1cs_witness(addressInput, pathInput);

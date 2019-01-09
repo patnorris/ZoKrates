@@ -186,6 +186,17 @@ impl<T: Field> Into<FlatFunction<T>> for DirectiveR1CS {
                     }),
                 );
             }
+
+            LibsnarkGadgetHelper::MerkleRead => {
+                statements.insert(
+                    0,
+                    FlatStatement::Directive(DirectiveStatement {
+                        outputs: variables,
+                        inputs: inputs,
+                        helper: Helper::LibsnarkGadget(LibsnarkGadgetHelper::MerkleRead),
+                    }),
+                );
+            }
         }
 
         // insert a statement to return the subset of the witness

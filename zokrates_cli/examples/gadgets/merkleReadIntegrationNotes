@@ -1,0 +1,5 @@
+libsnark.rs:
+witness functions (31, 48) transform all inputs into one vector of 32 bytes elements (flattened), pass beginning of vector to C-witness-functionss
+
+wraplibsnarkgadgets.cpp:
+inputs for merkleRead witness; leaf node (256), tree_depth bits (16), tree_depth other nodes (16 * 256), root (256) --> in total: 4624
