@@ -3,3 +3,9 @@ witness functions (31, 48) transform all inputs into one vector of 32 bytes elem
 
 wraplibsnarkgadgets.cpp:
 inputs for merkleRead witness; leaf node (256), tree_depth bits (16), tree_depth other nodes (16 * 256), root (256) --> in total: 4624
+
+undefined reference to:
+https://github.com/rust-lang/rust-bindgen/issues/1046
+https://github.com/rust-lang/rust/issues/47493
+https://github.com/rust-lang/rust/issues/53916
+https://flames-of-code.netlify.com/blog/rust-and-cmake-cplusplus/

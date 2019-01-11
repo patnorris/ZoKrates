@@ -127,7 +127,7 @@ impl Importer {
                 #[cfg(feature = "libsnark")]
                 {
                     use helpers::LibsnarkGadgetHelper;
-                    use libsnark::{get_ethsha256_constraints, get_sha256_constraints, get_merkleRead_constraints};
+                    use libsnark::{get_ethsha256_constraints, get_sha256_constraints, get_merkleread_constraints};
                     use serde_json::from_str;
                     use standard::{DirectiveR1CS, R1CS};
                     use std::io::BufReader;
@@ -175,9 +175,8 @@ impl Importer {
                             };
                             origins.push(CompiledImport::new(compiled, alias));
                         }
-                        //
                         "LIBSNARK/merkleRead" => {
-                            let r1cs: R1CS = from_str(&get_merkleRead_constraints()).unwrap();
+                            let r1cs: R1CS = from_str(&get_merkleread_constraints()).unwrap();
                             let dr1cs: DirectiveR1CS = DirectiveR1CS {
                                 r1cs,
                                 directive: LibsnarkGadgetHelper::MerkleRead,

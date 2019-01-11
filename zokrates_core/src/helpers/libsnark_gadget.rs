@@ -9,7 +9,6 @@ use zokrates_field::field::Field;
 pub enum LibsnarkGadgetHelper {
     Sha256Compress,
     Sha256Ethereum,
-
     MerkleRead,
 }
 
@@ -18,7 +17,6 @@ impl fmt::Display for LibsnarkGadgetHelper {
         match *self {
             LibsnarkGadgetHelper::Sha256Compress => write!(f, "Sha256Compress"),
             LibsnarkGadgetHelper::Sha256Ethereum => write!(f, "Sha256Ethereum"),
-
             LibsnarkGadgetHelper::MerkleRead => write!(f, "MerkleRead"),
         }
     }
@@ -33,7 +31,6 @@ impl<T: Field> Executable<T> for LibsnarkGadgetHelper {
             LibsnarkGadgetHelper::Sha256Ethereum => {
                 serde_json::from_str(&get_ethsha256_witness(inputs))
             }
-
             LibsnarkGadgetHelper::MerkleRead => {
                 serde_json::from_str(&get_merkleread_witness(inputs))
             }
@@ -57,7 +54,6 @@ impl Signed for LibsnarkGadgetHelper {
         match self {
             LibsnarkGadgetHelper::Sha256Compress => (512, 25561),
             LibsnarkGadgetHelper::Sha256Ethereum => (512, 50610),
-
             LibsnarkGadgetHelper::MerkleRead => (512, 50610),
         }
     }
