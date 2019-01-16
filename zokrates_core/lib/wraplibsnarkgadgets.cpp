@@ -48,12 +48,51 @@ using namespace libsnark;
 using namespace libff;
 using std::vector;
 
+//1)
+//original definition of FieldT
+
 //typedef libff::Fr<alt_bn128_pp> FieldT;
-typedef libff::Fr<default_ec_pp> FieldT;
+typedef libff::Fr<default_ec_pp> FieldT; //compiles zokrates_core, error while compiling zokrates_cli: /home/zokrates/libsnark-f7c87b88744ecfd008126d415494d9b34c4c1b20/depends/libff/libff/common/rng.tcc:41: undefined reference to `SHA512_Init' [also `SHA512_Update', `SHA512_Final']
+
+//fails in library libff, rng.tcc function SHA512_rng (https://github.com/scipr-lab/libff/blob/master/libff/common/rng.tcc) in trying to link to functions
+//SHA512_Init(&sha512);
+//SHA512_Update(&sha512, &idx, sizeof(idx));
+//SHA512_Update(&sha512, &iter, sizeof(iter));
+//SHA512_Final((unsigned char*)hash, &sha512);
+//from #include <openssl/sha.h> (https://github.com/openssl/openssl/blob/master/include/openssl/sha.h), also (https://www.openssl.org/docs/man1.1.0/crypto/SHA512_Init.html)
+
+//CRH_with_bit_out_gadget (https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/hashes/knapsack/knapsack_gadget.tcc)
+//uses libff's rng.tcc function SHA512_rng (https://github.com/scipr-lab/libff/blob/master/libff/common/rng.tcc)
+
+//suggested solutions:
+// add -lcrypto and rebuild project (https://stackoverflow.com/questions/33518893/undefined-reference-to-sha1?rq=1)
+// install openssl-devel / libssl-dev (https://github.com/facebook/watchman/issues/529)
+// Running sudo apt install libssl-dev and then manually changing the Makefile to have LIBS = -lpthread -lssl -lcrypto (https://github.com/facebook/watchman/issues/529)
+// not linked against library (https://stackoverflow.com/questions/12573816/what-is-an-undefined-reference-unresolved-external-symbol-error-and-how-do-i-fix/12574400#12574400)
+
+
+//2)
+//try another definition of FieldT
+
 //template<typename ppT>
 //typedef ram_zksnark_machine_pp<ppT> ramT; //error: template declaration of 'typedef'
 //using ramT = typename ram_zksnark_machine_pp<ppT>; //error: expected nested-name-specifier
 //typedef ram_base_field<ramT> FieldT;
+
+//but cannot use templates (template<typename ppT>)
+//and I cannot find how to typedef ppT
+//closest files I found: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/pairing/pairing_params.hpp
+// and EC_ppT (https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/public_params.hpp)
+
+// ram_zksnark_machine_pp from https://github.com/scipr-lab/libsnark/blob/master/libsnark/zk_proof_systems/zksnark/ram_zksnark/ram_zksnark_params.hpp
+
+//ramT as defined in https://github.com/scipr-lab/libsnark/blob/master/libsnark/zk_proof_systems/zksnark/ram_zksnark/profiling/profile_ram_zksnark.cpp
+//or in https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/cpu_checkers/fooram/examples/test_fooram.cpp
+//or in https://github.com/scipr-lab/libsnark/blob/master/libsnark/zk_proof_systems/zksnark/ram_zksnark/tests/test_ram_zksnark.cpp
+
+// FieldT definition (with ramT) as used in https://github.com/scipr-lab/libsnark/blob/master/libsnark/zk_proof_systems/zksnark/ram_zksnark/ram_compliance_predicate.hpp
+// or in https://github.com/scipr-lab/libsnark/blob/master/libsnark/reductions/ram_to_r1cs/ram_to_r1cs.tcc
+//or in https://github.com/scipr-lab/libsnark/blob/master/libsnark/reductions/ram_to_r1cs/gadgets/memory_checker_gadget.hpp
 
 typedef CRH_with_bit_out_gadget<FieldT> HashT;
 
