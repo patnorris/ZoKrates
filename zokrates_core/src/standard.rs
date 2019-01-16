@@ -171,30 +171,12 @@ impl<T: Field> Into<FlatFunction<T>> for DirectiveR1CS {
                 inputs: inputs,
                 helper: Helper::LibsnarkGadget(LibsnarkGadgetHelper::Sha256Ethereum),
             }),
+            LibsnarkGadgetHelper::MerkleRead => FlatStatement::Directive(DirectiveStatement {
+                outputs: variables,
+                inputs: inputs,
+                helper: Helper::LibsnarkGadget(LibsnarkGadgetHelper::MerkleRead),
+            }),
         };
-
-            LibsnarkGadgetHelper::Sha256Ethereum => {
-                statements.insert(
-                    0,
-                    FlatStatement::Directive(DirectiveStatement {
-                        outputs: variables,
-                        inputs: inputs,
-                        helper: Helper::LibsnarkGadget(LibsnarkGadgetHelper::Sha256Ethereum),
-                    }),
-                );
-            }
-
-            LibsnarkGadgetHelper::MerkleRead => {
-                statements.insert(
-                    0,
-                    FlatStatement::Directive(DirectiveStatement {
-                        outputs: variables,
-                        inputs: inputs,
-                        helper: Helper::LibsnarkGadget(LibsnarkGadgetHelper::MerkleRead),
-                    }),
-                );
-            }
-        }
 
         // insert a statement to return the subset of the witness
         let return_statement = FlatStatement::Return(FlatExpressionList {
