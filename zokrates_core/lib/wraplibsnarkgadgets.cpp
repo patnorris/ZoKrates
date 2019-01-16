@@ -16,13 +16,47 @@
 #include <libsnark/gadgetlib1/gadgets/hashes/hash_io.hpp>
 #include <libsnark/gadgetlib1/gadgets/merkle_tree/merkle_authentication_path_variable.hpp>
 
+#include <libff/common/utils.hpp>
+
+#include <libsnark/common/default_types/r1cs_ppzkpcd_pp.hpp>
+#include <libsnark/common/default_types/r1cs_ppzksnark_pp.hpp>
+#include <libsnark/relations/ram_computations/rams/fooram/fooram_params.hpp>
+#include <libsnark/zk_proof_systems/ppzksnark/ram_ppzksnark/examples/run_ram_ppzksnark.hpp>
+#include <libsnark/zk_proof_systems/zksnark/ram_zksnark/examples/run_ram_zksnark.hpp>
+
+#include <numeric>
+
+#include <libsnark/gadgetlib1/gadgets/delegated_ra_memory/memory_load_gadget.hpp>
+#include <libsnark/gadgetlib1/gadgets/delegated_ra_memory/memory_load_store_gadget.hpp>
+#include <libsnark/relations/ram_computations/memory/delegated_ra_memory.hpp>
+#include <libsnark/relations/ram_computations/rams/ram_params.hpp>
+#include <libsnark/zk_proof_systems/pcd/r1cs_pcd/compliance_predicate/compliance_predicate.hpp>
+#include <libsnark/zk_proof_systems/pcd/r1cs_pcd/compliance_predicate/cp_handler.hpp>
+
+#include <openssl/sha.h>
+
+#include <libsnark/zk_proof_systems/zksnark/ram_zksnark/ram_zksnark_params.hpp>
+
+#include <sstream>
+
+#include <libsnark/common/default_types/ram_zksnark_pp.hpp>
+#include <libsnark/relations/ram_computations/rams/examples/ram_examples.hpp>
+#include <libsnark/relations/ram_computations/rams/tinyram/tinyram_params.hpp>
+#include <libsnark/zk_proof_systems/zksnark/ram_zksnark/examples/run_ram_zksnark.hpp>
+
 using namespace libsnark;
 using namespace libff;
 using std::vector;
 
-typedef libff::Fr<alt_bn128_pp> FieldT;
-//typedef libff:: HashT;
-//template<typename HashT>
+//typedef libff::Fr<alt_bn128_pp> FieldT;
+typedef libff::Fr<default_ec_pp> FieldT;
+//template<typename ppT>
+//typedef ram_zksnark_machine_pp<ppT> ramT; //error: template declaration of 'typedef'
+//using ramT = typename ram_zksnark_machine_pp<ppT>; //error: expected nested-name-specifier
+//typedef ram_base_field<ramT> FieldT;
+
+typedef CRH_with_bit_out_gadget<FieldT> HashT;
+
 
 pb_variable_array<FieldT> from_bits(std::vector<bool> bits, pb_variable<FieldT>& ZERO)
 {
@@ -392,9 +426,13 @@ char* _sha256Witness(const uint8_t* inputs, int inputs_length)
     return result;
 }
 
-template<typename HashT>
+//template<typename ppT> //undefined reference to `_merkleReadConstraints' [when building zokrates_cli]
 char* _merkleReadConstraints()
 {
+    //typedef ram_zksnark_machine_pp<ppT> ramT; //error: could not convert 'pb' from 'libsnark::protoboard<int>' to 'libsnark::protoboard<libff::Fp_model<4, ((const libff::bigint<4>&)(& libff::alt_bn128_modulus_r))> >' [when building zokrates_core]
+    //typedef ram_base_field<ramT> FieldT;
+    //typedef CRH_with_bit_out_gadget<FieldT> HashT;
+
   //see test: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
     const size_t digest_len = HashT::get_digest_len();
     libff::alt_bn128_pp::init_public_params();
@@ -429,9 +467,13 @@ char* _merkleReadConstraints()
     return result;
 }
 
-template<typename HashT>
+//template<typename ppT> //undefined reference to `_merkleReadWitness' [when building zokrates_cli]
 char* _merkleReadWitness(const uint8_t* inputs, int inputs_length)
 {
+    // typedef ram_zksnark_machine_pp<ppT> ramT;
+    // typedef ram_base_field<ramT> FieldT;
+    // typedef CRH_with_bit_out_gadget<FieldT> HashT;
+
   //see test: https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
     const size_t digest_len = HashT::get_digest_len();
     libff::alt_bn128_pp::init_public_params();
@@ -446,8 +488,10 @@ char* _merkleReadWitness(const uint8_t* inputs, int inputs_length)
 
     //read_successful --> ONE
     merkle_tree_check_read_gadget<FieldT, HashT> m(pb, tree_depth, address_bits, leaf, root, path, ONE, "m");
-    path.generate_r1cs_constraints(true);
-    m.generate_r1cs_constraints(true);
+    //path.generate_r1cs_constraints(true);
+    path.generate_r1cs_constraints();
+    //m.generate_r1cs_constraints(true);
+    m.generate_r1cs_constraints();
 
 //leaf aka ri or di
 //address aka pathToLeaf
