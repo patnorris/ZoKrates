@@ -15,30 +15,39 @@ import "LIBSNARK/sha256packed"
 //(use gadget differently; no update but two merkle trees with same authentication path)
 //https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_update_gadget.hpp
 
-def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
-  return computedRoot0, computedRoot1
+//def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
+//  return computedRoot0, computedRoot1
 
 def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
   field computedRoot0 = leafHash[0]
   field computedRoot1 = leafHash[1]
 
 //add parameter depthOfTree, initiate loopLengthVariable to 10 and then set loopLengthVariable to depthOfTree if they are not the same
-  field maxNumberLoops = 10
-  maxNumberLoops = if maxNumberLoops == depthOfTree then maxNumberLoops else depthOfTree fi
+  //field maxNumberLoops = 10
+  //maxNumberLoops = if maxNumberLoops == depthOfTree then maxNumberLoops else depthOfTree fi
+
+  field pathToTake = 0
+  field otherHash0 = 0
+  field otherHash1 = 1
+  field shaInputLeft0 = 0
+  field shaInputLeft1 = 1
+  field shaInputRight0 = 2
+  field shaInputRight1 = 3
+
   //for field i in 0..10 do
   for field i in 0..2 do
-		field pathToTake =  pathToLeaf[i]
+		pathToTake =  pathToLeaf[i]
 
-    //if pathToTake == 1: hash(leaf, next from otherHashes: i*2, i*2+1)
-    //else if pathToTake == 0: hash(next from otherHashes: i*2, i*2+1, leaf)
-    //else (pathToTake != 0|1): current hash is computedRoot
+    otherHash0 = otherHashes[i*2]
+    otherHash1 = otherHashes[i*2 + 1]
 
-    field otherHash0 = otherHashes[i*2]
-    field otherHash1 = otherHashes[i*2 + 1]
+    shaInputLeft0 = if pathToTake == 1 then computedRoot0 else otherHash0 fi
+    shaInputLeft1 = if pathToTake == 1 then computedRoot1 else otherHash1 fi
 
-//short circuits not supported in arithmetic circuits --> cannot call function in if/else
-    computedRoot0, computedRoot1 = if pathToTake == 1 then sha256packed(computedRoot0, computedRoot1, otherHash0, otherHash1) else returnRootHashes(computedRoot0, computedRoot1) fi
-    computedRoot0, computedRoot1 = if pathToTake == 0 then sha256packed(otherHash0, otherHash1, computedRoot0, computedRoot1) else returnRootHashes(computedRoot0, computedRoot1) fi
+    shaInputRight0 = if pathToTake == 1 then otherHash0 else computedRoot0 fi
+    shaInputRight1 = if pathToTake == 1 then otherHash1 else computedRoot1 fi
+
+    computedRoot0, computedRoot1 = sha256packed(shaInputLeft0, shaInputLeft1, shaInputRight0, shaInputRight1)
 
 	endfor
 
