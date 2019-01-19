@@ -1,0 +1,12 @@
+//--> killed
+
+import "../helpers/sha256.code" as sha256
+
+def main() -> (field):
+
+	field[3] multiAr = [[1, 1, 1], [0, 1, 1], [0, 0, 1]]
+
+	field[3] a1 = multiAr[0]
+	a1 == [1, 1, 1]
+
+	return 1

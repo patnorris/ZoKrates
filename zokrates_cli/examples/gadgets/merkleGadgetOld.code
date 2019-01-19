@@ -1,0 +1,70 @@
+// merkle gadget
+//in:
+//  leaf: leaf in question, its presence in the Merkle tree will be proven (512 bits)
+//  pathToLeaf: for now 1 bit, i.e. 1 means leaf is left leaf, 0 means leaf is right leaf
+//  otherNodes: for now 1 node, the left or right node depending on position of leaf (256 bits)
+//  root: root of the Merkle tree, computed root from leaves will be checked against this
+
+import "LIBSNARK/sha256packed"
+//import "./equalityGadget.code" as equalityGadget
+//import "./helpers/calculateRootForLeftLeaf512Bits.code" as calculateRootForLeftLeaf512Bits
+//import "./helpers/calculateRootForRightLeaf512Bits.code" as calculateRootForRightLeaf512Bits
+
+def hashLeafLeft(field computedRoot0, field computedRoot1, field otherHash0, field otherHash1) -> (field, field):
+  computedRoot0, computedRoot1 = sha256packed(computedRoot0, computedRoot1, otherHash0, otherHash1)
+  return computedRoot0, computedRoot1
+
+def hashLeafRight(field otherHash0, field otherHash1, field computedRoot0, field computedRoot1) -> (field, field):
+  computedRoot0, computedRoot1 = sha256packed(otherHash0, otherHash1, computedRoot0, computedRoot1)
+  return computedRoot0, computedRoot1
+
+def calculateHashOfNodes(field computedRoot0, field computedRoot1, field otherHash0, field otherHash1, field pathToTake) -> (field, field):
+//'Compilation failed: Semantic error: if pathToTake == 1 then sha256packed(computedRoot0, computedRoot1, otherHash0, otherHash1) else sha256packed(otherHash0, otherHash1, computedRoot0, computedRoot1) fi should be a FunctionCall'
+  //computedRoot0, computedRoot1 = if pathToTake == 1 then sha256packed(computedRoot0, computedRoot1, otherHash0, otherHash1) else sha256packed(otherHash0, otherHash1, computedRoot0, computedRoot1) fi
+//'Compilation failed: Semantic error: if pathToTake == 1 then hashLeafLeft(computedRoot0, computedRoot1, otherHash0, otherHash1) else hashLeafRight(otherHash0, otherHash1, computedRoot0, computedRoot1) fi should be a FunctionCall'
+  //computedRoot0, computedRoot1 = if pathToTake == 1 then hashLeafLeft(computedRoot0, computedRoot1, otherHash0, otherHash1) else hashLeafRight(otherHash0, otherHash1, computedRoot0, computedRoot1) fi
+//Compilation failed: Semantic error: if pathToTake == 1 then hashLeafLeft(computedRoot0, computedRoot1, otherHash0, otherHash1) else returnRootHashes(computedRoot0, computedRoot1) fi should be a FunctionCall
+  //computedRoot0, computedRoot1 = if pathToTake == 1 then hashLeafLeft(computedRoot0, computedRoot1, otherHash0, otherHash1) else  returnRootHashes(computedRoot0, computedRoot1) fi
+  //computedRoot0, computedRoot1 = if pathToTake == 0 then hashLeafRight(otherHash0, otherHash1, computedRoot0, computedRoot1) else  returnRootHashes(computedRoot0, computedRoot1) fi
+//Compilation failed: Semantic error: if pathToTake == 1 then returnRootHashes(leftHash0, leftHash1) else returnRootHashes(rightHash0, rightHash1) fi should be a FunctionCall
+  leftHash0, leftHash1 = hashLeafLeft(computedRoot0, computedRoot1, otherHash0, otherHash1)
+  rightHash0, rightHash1 = hashLeafRight(otherHash0, otherHash1, computedRoot0, computedRoot1)
+  //computedRoot0, computedRoot1 = if pathToTake == 1 then returnRootHashes(leftHash0, leftHash1) else returnRootHashes(rightHash0, rightHash1) fi
+//Compilation failed: Semantic error: if pathToTake == 1 then returnRootHashes(leftHash0, leftHash1) else 0 fi should be a FunctionCall
+  //computedRoot0, computedRoot1 = if pathToTake == 1 then returnRootHashes(leftHash0, leftHash1) else 0 fi
+  //computedRoot0, computedRoot1 = if pathToTake == 0 then returnRootHashes(rightHash0, rightHash1) else returnRootHashes(computedRoot0, computedRoot1) fi
+  computedRoot0 = if pathToTake == 1 then leftHash0 else rightHash0 fi
+  computedRoot1 = if pathToTake == 1 then leftHash1 else rightHash1 fi
+  return computedRoot0, computedRoot1
+
+def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
+  return computedRoot0, computedRoot1
+
+def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
+  field computedRoot0 = leafHash[0]
+  field computedRoot1 = leafHash[1]
+
+  field stopValue = 2
+  for field i in 0..10 do
+		field pathToTake =  pathToLeaf[i]
+
+    //if pathToTake == 1: hash(leaf, next from otherHashes: i*2, i*2+1)
+    //else if pathToTake == 0: hash(next from otherHashes: i*2, i*2+1, leaf)
+    //else (pathToTake == 2): current hash is computedRoot
+
+    field otherHash0 = otherHashes[i*2]
+    field otherHash1 = otherHashes[i*2 + 1]
+    // does not accept the two "return values" (computedRoot0, computedRoot1) --> own function that just returns them, otherwise work with arrays
+//Compilation failed: Semantic error: if pathToTake == stopValue then returnRootHashes(computedRoot0, computedRoot1) else calculateHashOfNodes(computedRoot0, computedRoot1, otherHash0, otherHash1, pathToTake) fi should be a FunctionCall
+    computedRoot0, computedRoot1 = if pathToTake == stopValue then returnRootHashes(computedRoot0, computedRoot1) else calculateHashOfNodes(computedRoot0, computedRoot1, otherHash0, otherHash1, pathToTake) fi
+
+	endfor
+
+
+  //field equalityGiven = equalityGadget(computedRoot, root)
+  //equalityGiven == 1
+
+  computedRoot0 == root[0]
+  computedRoot1 == root[1]
+
+  return 1

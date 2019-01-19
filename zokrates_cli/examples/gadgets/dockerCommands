@@ -1,0 +1,18 @@
+after merge: build.sh --> change to LF (from CRLF) in lower bar (otherwise build.sh not found)
+
+cd D:/02_TUBerlin/04_MasterThesis/coding/ProofOfReplication/fork/ZoKrates
+docker build -t zokrates .
+docker run -ti zokrates /bin/bash
+
+cd src/target/debug
+cd ZoKrates/target/debug
+
+./zokrates compile -i ../../zokrates_cli/examples/gadgets/
+./zokrates setup
+./zokrates compute-witness -a 1 2 3
+./zokrates generate-proof
+./zokrates export-verifier
+
+no space left:
+https://stackoverflow.com/questions/30604846/docker-error-no-space-left-on-device
+docker system prune

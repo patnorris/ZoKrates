@@ -1,0 +1,19 @@
+merkleproof.code
+In: 1024 bits (that is each single bit is a parameter, private i551 to private i0, private left255 to private left0, root255 to root0)
+Out: 1
+FLOW:
+helper functions:
+	boolean operations
+	add operations
+	rotations
+	copy
+	extend
+	compound
+	sha256 [sha256.code copied into]
+main function:
+	in: 512 private inputs (bits); 256 private inputs ("left"); 256 inputs ("root") [1024 bits in total, 768 private]
+	compute hash: 
+		r255 - r0 = sha256(..) with 512 private inputs i511-i0
+		h255 - h0 = sha256(..) with 256 left and r255-r0
+	h0 == root0 to h255 == root255
+	return 1

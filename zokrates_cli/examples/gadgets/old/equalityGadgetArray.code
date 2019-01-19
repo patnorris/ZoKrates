@@ -1,0 +1,21 @@
+// equality gadget
+//takes two leaves to compare
+//each leaf has 256 bits
+//each bit, i.e. twice 256 = 512, is a parameter (as two arrays)
+//assure equality by comparing each bit of one value to the corresponding bit of the other values
+
+//comparison to EQUALITY_GADGET_HPP:
+//no protoboard needed
+//no arrays in ZoKrates --> individual bits instead of arrays of bits
+//no disjunction and conjunction gadgets needed as equality (of all corresponding bits) can be checked directly
+//and no protoboard in place that needs to register those constraints
+//output corresponds to returned 1 here
+//--> much easier to understand, straight forward
+//--> more cumbersome as no arrays
+
+def main(field[256] inputOneBits, field[256] inputTwoBits) -> (field):
+  for field i in 0..256 do
+    inputOneBits[i] == inputTwoBits[i]
+  endfor
+
+  return 1

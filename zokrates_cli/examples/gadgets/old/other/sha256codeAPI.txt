@@ -1,0 +1,17 @@
+sha256.code
+API
+In: 512 private bits (that is each single bit is a parameter, private i551 to private i0)
+Out: 256 bits (H0b31 to H7b0)
+FLOW:
+helper functions
+main function:
+	in: 512 private inputs (bits)
+	check that all input are bits
+	copy input into 16 32-bit words
+	Extension loop:
+		w16 - w63 = Extend(..) with w1++, w14++, w0++, w9++
+	call helper functions: init H0 - H7
+	copy H0 - H7 into a - h
+	a31, a30, ..., h1, h0 = Compound [compression] (..) with 0, 1, ...; w0++; a31 - h0 (64 times)
+	H0b31 - H7b0 = ADD(..) with H_++ until 7; a++ until h
+	return H0b31 - H7b0 [256 bits]
