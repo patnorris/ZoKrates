@@ -4,10 +4,13 @@ cd D:/02_TUBerlin/04_MasterThesis/coding/ProofOfReplication/fork/ZoKrates
 docker build -t zokrates .
 docker run -ti zokrates /bin/bash
 
+//not needed
 cd src/target/debug
 cd ZoKrates/target/debug
 
+./zokrates compile -i examples/gadgets/
 ./zokrates compile -i ../../zokrates_cli/examples/gadgets/
+
 ./zokrates setup
 ./zokrates compute-witness -a 1 2 3
 ./zokrates generate-proof

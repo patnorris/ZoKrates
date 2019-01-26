@@ -1,0 +1,70 @@
+// merkle gadget
+//in:
+//  leaf: leaf in question, its presence in the Merkle tree will be proven (512 bits)
+//  pathToLeaf: for now 1 bit, i.e. 1 means leaf is left leaf, 0 means leaf is right leaf
+//  otherNodes: for now 1 node, the left or right node depending on position of leaf (256 bits)
+//  root: root of the Merkle tree, computed root from leaves will be checked against this
+
+import "LIBSNARK/sha256packed"
+//import merkle gadget from here?
+//https://github.com/scipr-lab/libsnark/tree/master/libsnark/gadgetlib1/gadgets/merkle_tree
+//use:
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.hpp
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
+//future work: do di and ri proof in one proof?:
+//(use gadget differently; no update but two merkle trees with same authentication path)
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_update_gadget.hpp
+
+//def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
+//  return computedRoot0, computedRoot1
+
+def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
+  field computedRoot0 = leafHash[0]
+  field computedRoot1 = leafHash[1]
+
+//add parameter depthOfTree, initiate loopLengthVariable to 10 and then set loopLengthVariable to depthOfTree if they are not the same
+  //field maxNumberLoops = 10
+  //maxNumberLoops = if maxNumberLoops == depthOfTree then maxNumberLoops else depthOfTree fi
+
+  field pathToTake = 0
+  field otherHash0 = 0
+  field otherHash1 = 1
+  field shaInputLeft0 = 0
+  field shaInputLeft1 = 1
+  field shaInputRight0 = 2
+  field shaInputRight1 = 3
+
+//derive number of iterations from pathToLeaf (i.e. until first 2 appears add 1 to numberOfIterations)
+  field numberOfIterations = 0
+  field plusOne = 0
+
+  for field i in 0..10 do
+    pathToTake =  pathToLeaf[i]
+    plusOne = numberOfIterations + 1
+    //if it is a 2 no more iterations will be needed (depth of tree is reached)
+    numberOfIterations = if pathToTake == 2 then numberOfIterations else plusOne fi
+
+	endfor
+
+//compute root of merkle tree by hashing up the tree
+  //for field i in 0..numberOfIterations do
+  for field i in 0..2 do
+		pathToTake =  pathToLeaf[i]
+
+    otherHash0 = otherHashes[i*2]
+    otherHash1 = otherHashes[i*2 + 1]
+
+    shaInputLeft0 = if pathToTake == 1 then computedRoot0 else otherHash0 fi
+    shaInputLeft1 = if pathToTake == 1 then computedRoot1 else otherHash1 fi
+
+    shaInputRight0 = if pathToTake == 1 then otherHash0 else computedRoot0 fi
+    shaInputRight1 = if pathToTake == 1 then otherHash1 else computedRoot1 fi
+
+    computedRoot0, computedRoot1 = sha256packed(shaInputLeft0, shaInputLeft1, shaInputRight0, shaInputRight1)
+
+	endfor
+
+  computedRoot0 == root[0]
+  computedRoot1 == root[1]
+
+  return 1
