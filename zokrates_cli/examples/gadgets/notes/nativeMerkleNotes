@@ -1,0 +1,16 @@
+testPorGadget with merkleGadget for only ri with 0..2 loops compiles and computes Witness
+--> to test: numberOfIterations variable as loop constraint
+--> to test: more than 2 loops
+--> to test: with merkleGadget for di
+--> to test: with actual hash value for ri (and di)
+
+test: numberOfIterations variable as loop constraint
+--> change pathToLeaf in testPorGadget
+--> change loop initialization in merkleGadget
+thread 'main' panicked at 'Compilation failed: Syntax error: Error at 47:21: Expected one of [number], got `numberOfIterations`', zokrates_cli/src/bin.rs:261:33
+
+test: more than 2 loops
+for 2 loops: field[2] rRoot = [242148198687467878840382289548271025142, 313413253113812096234020175835731180133]
+--> change to 3 loops and adapt root hash later
+for 3 loops first field for root (hash) is:
+for 3 loops second field for root (hash) is:

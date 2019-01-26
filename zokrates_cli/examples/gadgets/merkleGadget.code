@@ -15,9 +15,6 @@ import "LIBSNARK/sha256packed"
 //(use gadget differently; no update but two merkle trees with same authentication path)
 //https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_update_gadget.hpp
 
-//def returnRootHashes(field computedRoot0, field computedRoot1) -> (field, field):
-//  return computedRoot0, computedRoot1
-
 def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
   field computedRoot0 = leafHash[0]
   field computedRoot1 = leafHash[1]
@@ -35,20 +32,22 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
   field shaInputRight1 = 3
 
 //derive number of iterations from pathToLeaf (i.e. until first 2 appears add 1 to numberOfIterations)
-  field numberOfIterations = 0
-  field plusOne = 0
-
-  for field i in 0..10 do
-    pathToTake =  pathToLeaf[i]
-    plusOne = numberOfIterations + 1
+//initiate numberOfIterations as upper bound for the for loop where the merkle tree root is computed
+  //field numberOfIterations = 0
+//initiate plusOne as variable to use if numberOfIterations should be incremented
+  //field plusOne = 0
+//find correct value for numberOfIterations; every 0 or 1 in pathToLeaf means an incrementation until the values in pathToLeaf are 2
+  //for field i in 0..10 do
+    //pathToTake =  pathToLeaf[i]
+    //plusOne = numberOfIterations + 1
     //if it is a 2 no more iterations will be needed (depth of tree is reached)
-    numberOfIterations = if pathToTake == 2 then numberOfIterations else plusOne fi
+    //numberOfIterations = if pathToTake == 2 then numberOfIterations else plusOne fi
 
-	endfor
+	//endfor
 
 //compute root of merkle tree by hashing up the tree
   //for field i in 0..numberOfIterations do
-  for field i in 0..2 do
+  for field i in 0..3 do
 		pathToTake =  pathToLeaf[i]
 
     otherHash0 = otherHashes[i*2]
