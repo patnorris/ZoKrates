@@ -33,23 +33,25 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
 
 //derive number of iterations from pathToLeaf (i.e. until first 2 appears add 1 to numberOfIterations)
 //numberOfIterations as upper bound for the for loop where the merkle tree root is computed
-  //field numberOfIterations = 0
+  field numberOfIterations = 0
 //initiate plusOne as variable to use if numberOfIterations should be incremented
-  //field plusOne = 0
+  field plusOne = 0
 //find correct value for numberOfIterations; every 0 or 1 in pathToLeaf means an incrementation until the values in pathToLeaf are 2
-  //for field i in 0..10 do
-    //pathToTake =  pathToLeaf[i]
-    //plusOne = numberOfIterations + 1
+  for field i in 0..10 do
+    pathToTake =  pathToLeaf[i]
+    plusOne = numberOfIterations + 1
     //if it is a 2 no more iterations will be needed (depth of tree is reached)
-    //numberOfIterations = if pathToTake == 2 then numberOfIterations else plusOne fi
+    numberOfIterations = if pathToTake == 2 then numberOfIterations else plusOne fi
 
-	//endfor
+	endfor
+
+  //numberOfIterations = 3
 
 //compute root of merkle tree by hashing up the tree
   //for field i in 0..numberOfIterations do
   for field i in 0..3 do
-		pathToTake =  pathToLeaf[i]
-    //pathToTake =  pathToLeaf[0]
+		//pathToTake =  pathToLeaf[i]
+    pathToTake =  pathToLeaf[0]
     //pathToTake =  1
 
     otherHash0 = otherHashes[i*2]

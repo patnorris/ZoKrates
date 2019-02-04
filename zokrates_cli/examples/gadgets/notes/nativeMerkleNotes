@@ -14,3 +14,26 @@ for 2 loops: field[2] rRoot = [242148198687467878840382289548271025142, 31341325
 --> change to 3 loops and adapt root hash later
 for 3 loops first field for root (hash) is:
 for 3 loops second field for root (hash) is:
+
+https://stackoverflow.com/questions/49628615/understanding-corrupted-size-vs-prev-size-glibc-error
+https://www.google.de/search?ei=Z9hPXLX6GdC1ggfgo52ACA&q=corrupted+size+vs.+prev_size+libsnark&oq=corrupted+size+vs.+prev_size+libsnark&gs_l=psy-ab.3...6293.9016..9329...1.0..0.224.1453.4j7j1......0....1..gws-wiz.......0i71j0j0i22i30j33i160.QCIjAexwDf0
+
+related?: https://github.com/Zokrates/ZoKrates/issues/248
+
+testing 1:
+Execution failed: Expected 242148198687467878840382289548271025142 to equal 139403900238838817953985205066437734652
+
+testing2:
+corrupted size vs. prev_size
+
+testing3:
+Execution failed: Expected 242148198687467878840382289548271025142 to equal 139403900238838817953985205066437734652
+
+testing4:
+corrupted size vs. prev_size
+
+testing5:
+corrupted size vs. prev_size
+
+testing6:
+Execution failed: Expected 242148198687467878840382289548271025142 to equal 139403900238838817953985205066437734652

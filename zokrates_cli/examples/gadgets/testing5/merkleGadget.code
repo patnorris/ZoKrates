@@ -48,20 +48,26 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
 //compute root of merkle tree by hashing up the tree
   //for field i in 0..numberOfIterations do
   for field i in 0..3 do
-		pathToTake =  pathToLeaf[i]
+		//pathToTake =  pathToLeaf[i]
     //pathToTake =  pathToLeaf[0]
     //pathToTake =  1
 
-    otherHash0 = otherHashes[i*2]
-    otherHash1 = otherHashes[i*2 + 1]
-    //otherHash0 = otherHashes[0]
-    //otherHash1 = otherHashes[1]
+    //otherHash0 = otherHashes[i*2]
+    //otherHash1 = otherHashes[i*2 + 1]
+    otherHash0 = otherHashes[0]
+    otherHash1 = otherHashes[1]
 
-    shaInputLeft0 = if pathToTake == 1 then computedRoot0 else otherHash0 fi
-    shaInputLeft1 = if pathToTake == 1 then computedRoot1 else otherHash1 fi
+    //shaInputLeft0 = if pathToTake == 1 then computedRoot0 else otherHash0 fi
+    //shaInputLeft1 = if pathToTake == 1 then computedRoot1 else otherHash1 fi
 
-    shaInputRight0 = if pathToTake == 1 then otherHash0 else computedRoot0 fi
-    shaInputRight1 = if pathToTake == 1 then otherHash1 else computedRoot1 fi
+    //shaInputRight0 = if pathToTake == 1 then otherHash0 else computedRoot0 fi
+    //shaInputRight1 = if pathToTake == 1 then otherHash1 else computedRoot1 fi
+
+    shaInputLeft0 = if pathToLeaf[i] == 1 then computedRoot0 else otherHash0 fi
+    shaInputLeft1 = if pathToLeaf[i] == 1 then computedRoot1 else otherHash1 fi
+
+    shaInputRight0 = if pathToLeaf[i] == 1 then otherHash0 else computedRoot0 fi
+    shaInputRight1 = if pathToLeaf[i] == 1 then otherHash1 else computedRoot1 fi
 
     computedRoot0, computedRoot1 = sha256packed(shaInputLeft0, shaInputLeft1, shaInputRight0, shaInputRight1)
 
