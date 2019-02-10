@@ -48,9 +48,9 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
 //compute root of merkle tree by hashing up the tree
   //for field i in 0..numberOfIterations do
   for field i in 0..3 do
-		pathToTake = pathToLeaf[i]
-    //pathToTake = pathToLeaf[0]
-    //pathToTake = 1
+		pathToTake =  pathToLeaf[i]
+    //pathToTake =  pathToLeaf[0]
+    //pathToTake =  1
 
     otherHash0 = otherHashes[i*2]
     otherHash1 = otherHashes[i*2 + 1]

@@ -57,3 +57,7 @@ testing9:
 
 testing10:
 3 loops: corrupted size vs. prev_size
+
+
+###############################################################################
+without for-loop to hash up the tree

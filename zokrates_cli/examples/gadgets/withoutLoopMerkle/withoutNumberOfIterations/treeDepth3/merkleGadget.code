@@ -1,0 +1,105 @@
+//witness: double free or corruption (!prev)
+//Aborted
+//same for current code (all variables as new fields)
+
+// merkle gadget
+//in:
+//  leaf: leaf in question, its presence in the Merkle tree will be proven (512 bits)
+//  pathToLeaf: for now 1 bit, i.e. 1 means leaf is left leaf, 0 means leaf is right leaf
+//  otherNodes: for now 1 node, the left or right node depending on position of leaf (256 bits)
+//  root: root of the Merkle tree, computed root from leaves will be checked against this
+
+import "LIBSNARK/sha256packed"
+//import merkle gadget from here?
+//https://github.com/scipr-lab/libsnark/tree/master/libsnark/gadgetlib1/gadgets/merkle_tree
+//use:
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.hpp
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_read_gadget.tcc
+//future work: do di and ri proof in one proof?:
+//(use gadget differently; no update but two merkle trees with same authentication path)
+//https://github.com/scipr-lab/libsnark/blob/master/libsnark/gadgetlib1/gadgets/merkle_tree/merkle_tree_check_update_gadget.hpp
+
+def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
+  field computedRoot0 = leafHash[0]
+  field computedRoot1 = leafHash[1]
+
+//add parameter depthOfTree, initiate loopLengthVariable to 10 and then set loopLengthVariable to depthOfTree if they are not the same
+  //field maxNumberLoops = 10
+  //maxNumberLoops = if maxNumberLoops == depthOfTree then maxNumberLoops else depthOfTree fi
+
+  //field pathToTake = 11111111111
+  //field otherHash0 = 11111111111
+  //field otherHash1 = 11111111111
+  //field shaInputLeft0 = 11111111
+  //field shaInputLeft1 = 11111111
+  //field shaInputRight0 = 2222222
+  //field shaInputRight1 = 3333333
+  //field provisionalRoot0 = 11111111
+  //field provisionalRoot1 = 11111111
+
+
+//derive number of iterations from pathToLeaf (i.e. until first 2 appears add 1 to numberOfIterations)
+//numberOfIterations as upper bound for the for loop where the merkle tree root is computed
+  //field numberOfIterations = 0
+//initiate plusOne as variable to use if numberOfIterations should be incremented
+  //field plusOne = 0
+//find correct value for numberOfIterations; every 0 or 1 in pathToLeaf means an incrementation until the values in pathToLeaf are 2
+  //for field i in 0..10 do
+    //pathToTake =  pathToLeaf[i]
+    //plusOne = numberOfIterations + 1
+    //if it is a 2 no more iterations will be needed (depth of tree is reached)
+    //numberOfIterations = if pathToTake == 2 then numberOfIterations else plusOne fi
+
+	//endfor
+
+//hash 1: leaf-level
+  field pathToTake = pathToLeaf[0]
+  field otherHash0 = otherHashes[0]
+  field otherHash1 = otherHashes[1]
+
+  field shaInputLeft0 = if pathToTake == 1 then computedRoot0 else otherHash0 fi
+  field shaInputLeft1 = if pathToTake == 1 then computedRoot1 else otherHash1 fi
+
+  field shaInputRight0 = if pathToTake == 1 then otherHash0 else computedRoot0 fi
+  field shaInputRight1 = if pathToTake == 1 then otherHash1 else computedRoot1 fi
+
+  field provisionalRoot0, field provisionalRoot1 = sha256packed(shaInputLeft0, shaInputLeft1, shaInputRight0, shaInputRight1)
+  field computedRoot0D1 = if pathToTake == 2 then computedRoot0 else provisionalRoot0 fi
+  field computedRoot1D1 = if pathToTake == 2 then computedRoot1 else provisionalRoot1 fi
+
+//hash 2: one above leaf-level
+  field pathToTakeD2 = pathToLeaf[1]
+  field otherHash0D2 = otherHashes[2]
+  field otherHash1D2 = otherHashes[3]
+
+  field shaInputLeft0D2 = if pathToTakeD2 == 1 then computedRoot0D1 else otherHash0D2 fi
+  field shaInputLeft1D2 = if pathToTakeD2 == 1 then computedRoot1D1 else otherHash1D2 fi
+
+  field shaInputRight0D2 = if pathToTakeD2 == 1 then otherHash0D2 else computedRoot0D1 fi
+  field shaInputRight1D2 = if pathToTakeD2 == 1 then otherHash1D2 else computedRoot1D1 fi
+
+  field provisionalRoot0D2, field provisionalRoot1D2 = sha256packed(shaInputLeft0D2, shaInputLeft1D2, shaInputRight0D2, shaInputRight1D2)
+  field computedRoot0D2 = if pathToTakeD2 == 2 then computedRoot0D1 else provisionalRoot0D2 fi
+  field computedRoot1D2 = if pathToTakeD2 == 2 then computedRoot1D1 else provisionalRoot1D2 fi
+
+//hash 3: two above leaf-level (final depth here)
+  field pathToTakeD3 = pathToLeaf[2]
+  field otherHash0D3 = otherHashes[4]
+  field otherHash1D3 = otherHashes[5]
+
+  field shaInputLeft0D3 = if pathToTakeD3 == 1 then computedRoot0D2 else otherHash0D3 fi
+  field shaInputLeft1D3 = if pathToTakeD3 == 1 then computedRoot1D2 else otherHash1D3 fi
+
+  field shaInputRight0D3 = if pathToTakeD3 == 1 then otherHash0D3 else computedRoot0D2 fi
+  field shaInputRight1D3 = if pathToTakeD3 == 1 then otherHash1D3 else computedRoot1D2 fi
+
+  field provisionalRoot0D3, field provisionalRoot1D3 = sha256packed(shaInputLeft0D3, shaInputLeft1D3, shaInputRight0D3, shaInputRight1D3)
+  field computedRoot0D3 = if pathToTakeD3 == 2 then computedRoot0D2 else provisionalRoot0D3 fi
+  field computedRoot1D3 = if pathToTakeD3 == 2 then computedRoot1D2 else provisionalRoot1D3 fi
+
+
+//computed root and original root should match
+  computedRoot0D3 == root[0]
+  computedRoot1D3 == root[1]
+
+  return 1
