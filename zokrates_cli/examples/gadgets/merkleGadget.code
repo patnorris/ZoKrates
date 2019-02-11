@@ -47,7 +47,7 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
 
 //compute root of merkle tree by hashing up the tree
   //for field i in 0..numberOfIterations do
-  for field i in 0..3 do
+  for field i in 0..2 do
 		pathToTake = pathToLeaf[i]
     //pathToTake = pathToLeaf[0]
     //pathToTake = 1
@@ -71,3 +71,4 @@ def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2
   computedRoot1 == root[1]
 
   return 1
+  //compiles: number of constraints: 278545 (3 loops)

@@ -61,3 +61,8 @@ testing10:
 
 ###############################################################################
 without for-loop to hash up the tree
+--> same Error
+###############################################################################
+path array as one field and evaluated with modulo and division by 10 (no modulo)
+###############################################################################
+path array values as individual parameters

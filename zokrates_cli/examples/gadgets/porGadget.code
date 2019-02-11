@@ -75,9 +75,9 @@ def main(field[2] rRoot, field[2] dRoot, field[10] pathToLeaf, field[512] addres
 
 //merkle proof for di (merkleGadget): provide 2 fields each (for sha256packed)
   field[2] diArray = [0, 0]
-  diArray[0] = diH0
-  diArray[1] = diH1
-  //field merkleOutputDi = merkleGadget(diArray, pathToLeaf, djVec, dRoot)
-  //merkleOutputDi == 1
+  //diArray[0] = diH0 //comment out for testing purposes
+  //diArray[1] = diH1 //comment out for testing purposes
+  field merkleOutputDi = merkleGadget(diArray, pathToLeaf, djVec, dRoot)
+  merkleOutputDi == 1
 
   return 1
