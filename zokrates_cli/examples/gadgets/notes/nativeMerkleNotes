@@ -66,3 +66,54 @@ without for-loop to hash up the tree
 path array as one field and evaluated with modulo and division by 10 (no modulo)
 ###############################################################################
 path array values as individual parameters
+###############################################################################
+working testPorGadget: Expected 242148198687467878840382289548271025142 to equal 208802326398363430125476821784903780610
+root r left (1): Execution failed: Expected 242148198687467878840382289548271025142 to equal 208802326398363430125476821784903780610 --> 208802326398363430125476821784903780610
+root r right (2): Execution failed: Expected 313413253113812096234020175835731180133 to equal 333869571469576187573435490552239901120 --> 333869571469576187573435490552239901120
+root d left (3): Execution failed: Expected 242148198687467878840382289548271025142 to equal 255341990864860583969800505325196298220 --> 255341990864860583969800505325196298220
+root d right (4): Execution failed: Expected 313413253113812096234020175835731180133 to equal 307530988904176686043894183388679718850 --> 307530988904176686043894183388679718850
+
+//compiles (5:50min): number of constraints: 334163
+//witness generation (1:19min): Witness: ~out_0 1
+//proving time: 56s
+//verification time
+//key generation (setup) time: 3:47min
+//proof size: 2294 bits
+//proving key size: 617550042 bits
+//verification key size: 3629 bits
+
+generate proof:
+* Elements of w skipped: 116963 (52.09%)
+* Elements of w processed with special addition: 101243 (45.09%)
+* Elements of w remaining: 6326 (2.82%)
+* Elements of w skipped: 99612 (53.66%)
+* Elements of w processed with special addition: 86008 (46.33%)
+* Elements of w remaining: 8 (0.00%)
+* Elements of w skipped: 141880 (52.06%)
+* Elements of w processed with special addition: 120605 (44.25%)
+* Elements of w remaining: 10068 (3.69%)
+* Elements of w skipped: 159511 (51.98%)
+* Elements of w processed with special addition: 137270 (44.73%)
+* Elements of w remaining: 10076 (3.28%)
+* G1 elements in proof: 7
+* G2 elements in proof: 1
+* Proof size in bits: 2294
+
+setup:
+num variables: 306858
+num constraints: 334163
+num inputs: 1
+* QAP number of variables: 306857
+* QAP pre degree: 334163
+* QAP degree: 393216
+* QAP number of input variables: 1
+* G1 window: 17
+* G2 window: 15
+* G1 elements in PK: 2234373
+* Non-zero G1 elements in PK: 1879884
+* G2 elements in PK: 306859
+* Non-zero G2 elements in PK: 185630
+* PK size in bits: 617550042
+* G1 elements in VK: 3
+* G2 elements in VK: 5
+* VK size in bits: 3629

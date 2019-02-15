@@ -1,0 +1,44 @@
+// merkle gadget
+//in:
+//  leaf: hash of leaf in question, its presence in the Merkle tree will be proven (256 bits as two fields)
+//  pathToLeaf: array of "bits" (as fields), i.e. 1 means leaf is left leaf, 0 means leaf is right leaf
+//  otherNodes: array of other nodes' hashes, the left or right node depending on position of leaf (256 bits per node, as 2 fields each)
+//  root: root of the Merkle tree, computed root from leaves will be checked against this
+
+import "LIBSNARK/sha256packed"
+
+def main(field[2] leafHash, field[10] pathToLeaf, field[20] otherHashes, field[2] root) -> (field):
+  field computedRoot0 = leafHash[0]
+  field computedRoot1 = leafHash[1]
+
+  field pathToTake = 11111111111
+  field otherHash0 = 11111111111
+  field otherHash1 = 11111111111
+  field shaInputLeft0 = 11111111
+  field shaInputLeft1 = 11111111
+  field shaInputRight0 = 2222222
+  field shaInputRight1 = 3333333
+
+//compute root of merkle tree by hashing up the tree
+
+  for field i in 0..2 do
+		pathToTake = pathToLeaf[i]
+
+    otherHash0 = otherHashes[i*2]
+    otherHash1 = otherHashes[i*2 + 1]
+
+    shaInputLeft0 = if pathToTake == 1 then computedRoot0 else otherHash0 fi
+    shaInputLeft1 = if pathToTake == 1 then computedRoot1 else otherHash1 fi
+
+    shaInputRight0 = if pathToTake == 1 then otherHash0 else computedRoot0 fi
+    shaInputRight1 = if pathToTake == 1 then otherHash1 else computedRoot1 fi
+
+    computedRoot0, computedRoot1 = sha256packed(shaInputLeft0, shaInputLeft1, shaInputRight0, shaInputRight1)
+
+	endfor
+
+  computedRoot0 == root[0]
+  computedRoot1 == root[1]
+
+  return 1
+  //compiles (ca. 26s): number of constraints: 111233
