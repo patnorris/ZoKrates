@@ -35,3 +35,5 @@ def main() -> (field):
   porOutput == 1
 
   return 1
+  //compiles: Number of constraints: 1224243
+  //Witness generation: Witness: ~out_0 1

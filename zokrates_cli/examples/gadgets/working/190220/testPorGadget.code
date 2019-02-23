@@ -39,7 +39,7 @@ def main() -> (field):
   porOutput == 1
 
   return 1
-//4 loops (6144MB of VM memory allocated):
+//4 loops in merkle gadget (6144MB of VM memory allocated):
   //compiles (3:04min): Number of constraints: 556719
   //witness generation (1:36min): Witness: ~out_0 1
   //proving time: 45s
@@ -48,3 +48,7 @@ def main() -> (field):
   //proof size: 2294 bits
   //proving key size: 1004377642 bits
   //verification key size: 3629 bits
+
+//10 loops in merkle gadget (6144MB of VM memory allocated):
+  //compiles: Number of constraints: 1224243
+  //Witness generation: Witness: ~out_0 1
