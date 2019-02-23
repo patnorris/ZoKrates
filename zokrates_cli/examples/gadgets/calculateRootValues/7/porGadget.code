@@ -1,7 +1,7 @@
 // por gadget
 //called to create the proof of replication
-
-//Ethereum public addresses: 512 bits (https://ethereum.stackexchange.com/questions/3542/how-are-ethereum-addresses-generated)
+//https://ethereum.stackexchange.com/questions/3542/how-are-ethereum-addresses-generated
+//Ethereum public addresses: 512 bits
 //--> ri 512 bits as well --> provided as array bits
 //--> same for di: 512 bits --> provided as array of bits
 //other leafs are already hashed: 256 bits --> how passed?: 2 fields each
@@ -58,8 +58,8 @@ def main(field[2] rRoot, field[2] dRoot, field[10] pathToLeaf, field[512] addres
   field[2] riArray = [0, 0]
   riArray[0] = riH0
   riArray[1] = riH1
-  field merkleOutputRi = merkleGadget(riArray, pathToLeaf, rjVec, rRoot)
-  merkleOutputRi == 1
+  //field merkleOutputRi = merkleGadget(riArray, pathToLeaf, rjVec, rRoot)
+  //merkleOutputRi == 1
 
 //transform di from field[512] into 4 fields
   field di0 = pack128(di[0], di[1], di[2], di[3], di[4], di[5], di[6], di[7], di[8], di[9], di[10], di[11], di[12], di[13], di[14], di[15], di[16], di[17], di[18], di[19], di[20], di[21], di[22], di[23], di[24], di[25], di[26], di[27], di[28], di[29], di[30], di[31], di[32], di[33], di[34], di[35], di[36], di[37], di[38], di[39], di[40], di[41], di[42], di[43], di[44], di[45], di[46], di[47], di[48], di[49], di[50], di[51], di[52], di[53], di[54], di[55], di[56], di[57], di[58], di[59], di[60], di[61], di[62], di[63], di[64], di[65], di[66], di[67], di[68], di[69], di[70], di[71], di[72], di[73], di[74], di[75], di[76], di[77], di[78], di[79], di[80], di[81], di[82], di[83], di[84], di[85], di[86], di[87], di[88], di[89], di[90], di[91], di[92], di[93], di[94], di[95], di[96], di[97], di[98], di[99], di[100], di[101], di[102], di[103], di[104], di[105], di[106], di[107], di[108], di[109], di[110], di[111], di[112], di[113], di[114], di[115], di[116], di[117], di[118], di[119], di[120], di[121], di[122], di[123], di[124], di[125], di[126], di[127])
@@ -75,9 +75,10 @@ def main(field[2] rRoot, field[2] dRoot, field[10] pathToLeaf, field[512] addres
 
 //merkle proof for di (merkleGadget): provide 2 fields each (for sha256packed)
   field[2] diArray = [0, 0]
-  diArray[0] = diH0 
+  diArray[0] = diH0
   diArray[1] = diH1
   field merkleOutputDi = merkleGadget(diArray, pathToLeaf, djVec, dRoot)
   merkleOutputDi == 1
 
   return 1
+  //compiles: number of constraints:

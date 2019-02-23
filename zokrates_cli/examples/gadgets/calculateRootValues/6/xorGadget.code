@@ -25,3 +25,4 @@ def main(field[512] inputOneBits, field[512] inputTwoBits) -> (field[512]):
 	endfor
 
 	return xored
+	//compiles: number of constraints:

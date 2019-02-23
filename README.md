@@ -11,6 +11,10 @@ ZoKrates is a toolbox for zkSNARKs on Ethereum.
 
 _This is a proof-of-concept implementation. It has not been tested for production._
 
+# This repo's Contribution
+
+The contributions made in this repo (and branch) are in the folder zokrates_cli > examples > gadgets (https://github.com/patnorris/ZoKrates/tree/native_merkle_gadget/zokrates_cli/examples/gadgets).
+
 ## Getting Started
 
 Have a look at the [documentation](https://zokrates.github.io/) for more information about using ZoKrates.  

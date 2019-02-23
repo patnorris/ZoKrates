@@ -19,3 +19,4 @@ def main(field[512] inputOneBits, field[512] inputTwoBits) -> (field):
   endfor
 
   return 1
+  //compiles (instantly): number of constraints: 513

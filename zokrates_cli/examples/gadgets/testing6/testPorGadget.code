@@ -41,3 +41,5 @@ def main() -> (field):
   porOutput == 1
 
   return 1
+  //10 loops: Killed
+  //10 loops (increased memory 1024MB-->4096MB): Number of constraints: 667679

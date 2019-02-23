@@ -73,6 +73,8 @@ root r right (2): Execution failed: Expected 31341325311381209623402017583573118
 root d left (3): Execution failed: Expected 242148198687467878840382289548271025142 to equal 255341990864860583969800505325196298220 --> 255341990864860583969800505325196298220
 root d right (4): Execution failed: Expected 313413253113812096234020175835731180133 to equal 307530988904176686043894183388679718850 --> 307530988904176686043894183388679718850
 
+2 loops 1024MB:
+
 //compiles (5:50min): number of constraints: 334163
 //witness generation (1:19min): Witness: ~out_0 1
 //proving time: 56s
@@ -117,3 +119,142 @@ num inputs: 1
 * G1 elements in VK: 3
 * G2 elements in VK: 5
 * VK size in bits: 3629
+#############################################################################################################
+2 loops 6144MB:
+//compiles (1:50min): Number of constraints: 334163
+//witness generation (0:55min): Witness: ~out_0 1
+//proving time: 34s
+//verification time
+//key generation (setup) time: 2:07min
+//proof size: 2294 bits
+//proving key size: 617550042 bits
+//verification key size: 3629 bits
+
+setup:
+num variables: 306858
+num constraints: 334163
+num inputs: 1
+* QAP number of variables: 306857
+* QAP pre degree: 334163
+* QAP degree: 393216
+* QAP number of input variables: 1
+* G1 window: 17
+* G2 window: 15
+* G1 elements in PK: 2234373
+* Non-zero G1 elements in PK: 1879884
+* G2 elements in PK: 306859
+* Non-zero G2 elements in PK: 185630
+* PK size in bits: 617550042
+* G1 elements in VK: 3
+* G2 elements in VK: 5
+* VK size in bits: 3629
+        Verification key in Solidity compliant format:{
+                vk.A = Pairing.G2Point([0x2cb810706a40a432f4f91e18f2713b10e6f10a4f30f317b5571444c2bc34a2d1, 0x10c07736c31cbb06dcb94e5c7b8482b2cf709111269e24a9caede31cb3b8287e], [0x2b61ca1bef1b3e1c5a4c3a63fa07805be5d9175dfd91ddc991f97b8ab1bb43c1, 0x1074dda963645816b18c957d3b60feadd12fecab7eb4a118e63f040626a8cc4c]);
+                vk.B = Pairing.G1Point(0x8f89121a01b390f428572032ebe89a02027de401f9b4c749eca9d8ccf4df67f, 0x24951dfcf95730a6065bf77bb6837df3bec920c70241483e22760c5fa8ca2c59);
+                vk.C = Pairing.G2Point([0x188d1c42c48a93a9ac615f9d2d0d11103c48504c2deff555c8dcf0a084a6f1fe, 0x24d2358d71d0c0e7319748837392e8bd12d1c317083d234885a785ecd94576cc], [0x13adbb30b422cf19986edec39d1893baf9b00d27a440e3218cdb03773e316c34, 0x155ec6f3b7b1a28dfaa6ecda323ed4e6048a9c4e326a27c6d7d08cc96a6473a3]);
+                vk.gamma = Pairing.G2Point([0x278ea52e78c831b5a2f271c2be675d9ea8c287d1de1f3731f5810d14e4cebaa4, 0x124a9c4f776abd644756e1c29dcd6e3d39b193c8b02dd9ff3b6ebc8a8d104ba2], [0x1baba2311da80df639b90a531ab61bf2e61dd92571cb079d84f849243b8380ba, 0x25d85c35c91f6ac551fd1dfab3399f5673b6e7ad4955456226ead08c664f0d2]);
+                vk.gammaBeta1 = Pairing.G1Point(0x1a69c19a821e08834808452beaba8122cee844cc5f5ed6a2e10d04d9023f50f7, 0x27d85c7eebe4d71107fef669c2b8d0e01dceccc9bf72739c3607401816a27f33);
+                vk.gammaBeta2 = Pairing.G2Point([0x233b4a6b5c012a5ad957007ad7ea36b3b043426015e936ca6b26cc8ea14c194f, 0x612f03af59983c3b0acec6e373c6c9fcc57e392cd54f6b530f82c1a92ae98a5], [0x71cc818b8ee42fa326c577008ae9577d055dca5c8fd557234a3b69c5a66e96, 0xf7775aee5634df2abba7f5c050730d9834f8535b2f8c51cdb7b02b4e89fe879]);
+                vk.Z = Pairing.G2Point([0xdf58714786bfe0a5207f339ab9c343ab53ecf46c43517bd24dc0be3588f0cd1, 0x1550e5f5865a40d5f1d90288cf9fa177aa5f78bb17b017fc399570d1346a4152], [0x18f545ae727a1d125118f2ab96797aa678a055f28207bb2377d303b9584a6035, 0xc65be0448e5c13e57e57d4ba16796440c3e703528b092e9a5a7344fa9b95888]);
+                vk.IC = new Pairing.G1Point[](2);
+                vk.IC[0] = Pairing.G1Point(0x1f8b1376e1ceb3e48743d57c818d7e8054ee6ca853581da224f77e5668860d7c, 0xce3ae87244d365dcd3bb7b2d4faa8eb8fbb86cb1879e0a789385f2a12ca011c);
+                vk.IC[1] = Pairing.G1Point(0xe9554c8ab7e96ec2e85619222ee57a88d0c081986d8af5408709639034a5213, 0xf5fa1124364eb6ca1adc2752fa6ce11f11a4c8dcf673827be9c7b711cf0ef36);
+                }
+setup successful: true
+
+generate proof:
+* Elements of w skipped: 116963 (52.09%)
+* Elements of w processed with special addition: 101243 (45.09%)
+* Elements of w remaining: 6326 (2.82%)
+* Elements of w skipped: 99612 (53.66%)
+* Elements of w processed with special addition: 86008 (46.33%)
+* Elements of w remaining: 8 (0.00%)
+* Elements of w skipped: 141880 (52.06%)
+* Elements of w processed with special addition: 120605 (44.25%)
+* Elements of w remaining: 10068 (3.69%)
+* Elements of w skipped: 159511 (51.98%)
+* Elements of w processed with special addition: 137270 (44.73%)
+* Elements of w remaining: 10076 (3.28%)
+* G1 elements in proof: 7
+* G2 elements in proof: 1
+* Proof size in bits: 2294
+Proof:
+A = Pairing.G1Point(0x103e917149b68cdc8ab72737c473d4961492d27b58d911e3d0be2d02815979f9, 0x2188e6f08013bfb4d6d4c3856a3ae146088bc4ace8c9fd954906d53808ec33ea);
+A_p = Pairing.G1Point(0x1e048856c9ebcaccbb63762c380571d33210981c51f62a870eb9926e9d569645, 0x12bc61a62df1e571c67b551eb78e4153e4f3aa8b93bf0ed19eb534ce6280abfa);
+B = Pairing.G2Point([0x253426f947e66fa21002536c54e5c89b6ae06e2d1cc843fecde6575ead75a1da, 0x8ea1ab7ab9397f0b749a49836dada41d55c09ebce0dc769093dc31731955ebe], [0x89faf539b0b210cbc9a13f3ad24f9e603de92c1b9bcf2968335761809b9a4e1, 0xae0e4656c16614dcb7ddb04382d94fb074fe872cd9a711ae19a44cbb0c802bc]);
+B_p = Pairing.G1Point(0x615d9d58a876e7abe624ff271a551081b8d73bf680125105130bbdaec646b11, 0x295e00cb048dfc0b3c00af32065d3b7bf8b4c4c668414db5fc8516d21409443d);
+C = Pairing.G1Point(0x18eef73ddbbcb65b7a800fa104e69c38de106d5b6f342181c4c822f0cb87e95d, 0x21df6a20af3a9124e3d6c5c1ce989627731917b4de6d99cbc44b2d11a5f8de0d);
+C_p = Pairing.G1Point(0x370df1fbfbddb55264a47411ebde5117bd437bb189b7eee8fd7c58e1fa2c855, 0xde5ee515332c21ac81a44b65aefa87d94678dbe87884dcb619ce1496008dc4b);
+H = Pairing.G1Point(0x23b9f263f828ba012d60aff928e5456205493063b2dce6e737cb194bd7fa0d70, 0x163c747fe2d151765ff5952c1e19eb6d49f324c6a0cc8ba2c8c6924f88baa72d);
+K = Pairing.G1Point(0x20f896f31918b9c17f2f723f6c567c1e5a966de0d1c3926cbf96ee49ac0a4931, 0x2daa5b8fbe8c1530d978c069e58312ae09c9efbe3b146d42a76b341a671e376a);
+generate-proof successful: true
+
+#####################################################################################################################
+4 loops 6144MB:
+//compiles (3:04min): Number of constraints: 556719
+//witness generation (1:36min): Witness: ~out_0 1
+//proving time: 45s
+//verification time
+//key generation (setup) time: 3:33min
+//proof size: 2294 bits
+//proving key size: 1004377642 bits
+//verification key size: 3629 bits
+
+setup:
+num variables: 511578
+num constraints: 556719
+num inputs: 1
+* QAP number of variables: 511577
+* QAP pre degree: 556719
+* QAP degree: 557056
+* QAP number of input variables: 1
+* G1 window: 17
+* G2 window: 15
+* G1 elements in PK: 3626533
+* Non-zero G1 elements in PK: 3035444
+* G2 elements in PK: 511579
+* Non-zero G2 elements in PK: 309430
+* PK size in bits: 1004377642
+* G1 elements in VK: 3
+* G2 elements in VK: 5
+* VK size in bits: 3629
+        Verification key in Solidity compliant format:{
+                vk.A = Pairing.G2Point([0x29dadafec218836608890157ed0c29c6fa0c4377ee87a2e17363401b9ae56036, 0x2e5630198afc54a1ac8c02308fbfc059a7f583e7d170310127285cdb157cf2ed], [0x6af9c22f5b3287f469ef6e2bed52a2737ac0c060c9ac96d2ea0f0716b182d6f, 0xebe0bcdbcbcba9d6da10e60c40c0bceef06c054c2159c01408c293df7866c4c]);
+                vk.B = Pairing.G1Point(0x212d1076a419a0c4f5a1980e92ef5def90c9ca10bcaf976e4a6ca6a62870068c, 0x24044402bf3d180fa8c3494fa00cdfd5119d807c8f4d2302b76301ab9ac2650b);
+                vk.C = Pairing.G2Point([0x1909f5b13e46462fd4af20d3d09a6de61111431abd7745d694eb4ae7b4ca2e46, 0x1cad1c2eed52472d8091ef0e4f50d4290dfa065f03a5ffb75603efb04ce14c09], [0x26b57b765ad197d75a659baf31f4f237777cf3224fe430aba45aa303dc3c24e3, 0x1efaed1d76fa5ab340feb70d9cd62d2101cf3cdaf89c8d1f4b924f7c0a11121f]);
+                vk.gamma = Pairing.G2Point([0xf4951c63b9e14fca958a60ac8613be34ed4a17dc66fded1268bb92089877019, 0x2acc3a58904f6ac93dd4f8fd4917a6d9afc8b7105f21803effba4b09b84ed0b3], [0x193cfbeee52aac77da88b6ab2e18fb72d693d15990af5fc57f566559725cb576, 0xc54344efc06d5488e0cc3e2c5132f13f59d1a9d74f0cfc53ac1fb9e7698927d]);
+                vk.gammaBeta1 = Pairing.G1Point(0x2288c8ec89d344ea93a364908455313fdfe3154602bd2e5b49600a9c188dbb9f, 0x18179872dbf83733ceee21c758e36c3e187cd76b4d724b3a794beadf5304567d);
+                vk.gammaBeta2 = Pairing.G2Point([0x1c58db4020cb6f4f6f34cea731eca349ffcbc89708470bed425264acf19890a7, 0x251c738d2cfb7f400c224ee154fed18bb497e585a9edfc790dc301b243e999b9], [0x87344500aa079425bbf9f7494ba92f0d52b4a489cb13ad9b7ceb357c3b03eec, 0x2f805868058f6443d04e4f5c2fbf1971c5d1e02d723a74c15f32db42fa4b4935]);
+                vk.Z = Pairing.G2Point([0x26f94135a6669700c5aee9c4a235f958101b40a8d659c27e2eafa070a725faa, 0x1782c8fab346f2af6941991754409d84467280cadb018f1062daff9388272db6], [0x145e83cb6245f3390351be9794d93300c4ba8b81511f03262f146fa8dd0d93e5, 0xc873111b7561d0db540150300600629c53a1f31ba66a45cac3408e2edef5e69]);
+                vk.IC = new Pairing.G1Point[](2);
+                vk.IC[0] = Pairing.G1Point(0x16562a317faf48f3db5e0539259dedb9aa23559fc2071b03a17c25e3182646b8, 0x2a065fdcfb0e6ec5833d06f3995ac02067520731cdb02dbe734ff6c197a02e66);
+                vk.IC[1] = Pairing.G1Point(0x1222dc515213709bd85cb5575d9255313025c31598d48adf416c8229b2156e90, 0x164f8faf5f39462c9db44a3d92fd2cf99796c28e3bdec627b6d63926964b0de9);
+                }
+setup successful: true
+
+generate proof:
+* Elements of w skipped: 193849 (51.79%)
+* Elements of w processed with special addition: 169843 (45.37%)
+* Elements of w remaining: 10632 (2.84%)
+* Elements of w skipped: 165015 (53.33%)
+* Elements of w processed with special addition: 144397 (46.67%)
+* Elements of w remaining: 16 (0.01%)
+* Elements of w skipped: 235224 (51.77%)
+* Elements of w processed with special addition: 202283 (44.52%)
+* Elements of w remaining: 16854 (3.71%)
+* Elements of w skipped: 264406 (51.68%)
+* Elements of w processed with special addition: 230285 (45.01%)
+* Elements of w remaining: 16886 (3.30%)
+* G1 elements in proof: 7
+* G2 elements in proof: 1
+* Proof size in bits: 2294
+Proof:
+A = Pairing.G1Point(0x21bd1ca834add9355a50346a090e906fb9b0c5e48ea492881c5fd4b373aca0e3, 0x4991ac3711b72e4e90ccd43f02e98cec315b90c5150f79545a62dcef26fbaec);
+A_p = Pairing.G1Point(0x29c1e8f2d45d47f9e19283a5d1a12e98c930106a1ca33ea86ad498bf73d77cfa, 0xaa4f3bc26bbe0039c23eca37812ab65952290abbf5e87d3495a7b96db9dfa26);
+B = Pairing.G2Point([0x114aa9956e2210a71549b1513885708f866a4277dea7a85597ad6c73cd60666e, 0x5967d1a1265c304f3871b39f09b163f960bdbebe7b391da33bd434c90339954], [0x22c90975c65a48cc87d1578baa8c718b4e0c5f16ff0da0122e62dc84b1e9138b, 0x19953c732ee8e452e1a13f743386d230f7b0afe5968f4c6e1aebddcbe868c33]);
+B_p = Pairing.G1Point(0x1d60be3da7cae94050cb2f890825f5d946e341154240f9b3c8279c47d06d21be, 0x7a19895872f2edb77936d0973ea32261b9c928ca02d537d6ba2492a3e118c08);
+C = Pairing.G1Point(0x261c64ea30666f426d1bcae1d39409c22ee5c4169cbba1ed3b490cf23687cb1c, 0x2887b8129830bca3606e004ee2744a2787890cda47d113d5093e78268fa2bd99);
+C_p = Pairing.G1Point(0x1811b3c5b02a556aafd900ec82d84302ed5de4c246ce1e1dc6f6b8e42d0e697d, 0xe6ffc18c64231e5ee064873cead48830f9fa77418ddb4090ca3eb3911e67312);
+H = Pairing.G1Point(0x2a0b14712737c4ce73a52e78cd0ce74deedec2e5f1610ac181405be0f513371, 0xe0d542a38c60670a037f4157262ce3c9de8c5a818280d0b923710d64d92f52a);
+K = Pairing.G1Point(0x16aa769e3caea664e0b1e697afc3b74f1be2c8a1f7eed203890e1689e2ebdeee, 0x2b8f1def7622a1cf9fcad00a284f33810fec9f414cc3c9b8205a3c3d99e3ec8e);
+generate-proof successful: true
